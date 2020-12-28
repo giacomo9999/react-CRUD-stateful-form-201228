@@ -5,7 +5,6 @@ class InputPanel extends Component {
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
-    console.log("handling change...", this.state);
   };
 
   submitForm = () => {
@@ -15,7 +14,7 @@ class InputPanel extends Component {
   render() {
     return (
       <div className="container-inner">
-        <h1>Add A Fruit</h1>
+        <h1>{this.props.headline}</h1>
         <form className="h-form">
           <label className="h-label">
             Name

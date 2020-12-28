@@ -8,7 +8,12 @@ class App extends Component {
       { id: 2, name: "banana", color: "yellow" },
       { id: 3, name: "orange", color: "orange" },
     ],
+    currentId: 4,
     inputPanelOpen: false,
+    addOrEdit: "add",
+    idToEdit: null,
+    nameToEdit: "",
+    colorToEdit: "",
   };
 
   toggleInputPanel = () => {
@@ -17,23 +22,36 @@ class App extends Component {
   };
 
   handleSubmit = (fruit) => {
-    this.setState({
-      fruits: [...this.state.fruits, fruit],
-      inputPanelOpen: false,
-    });
+    let newState = null;
+    this.state.addOrEdit === "add"
+      ? (newState = {
+          fruits: [...this.state.fruits, fruit],
+          inputPanelOpen: false,
+          currentId: this.state.currentId + 1,
+        })
+      : (newState = {
+          fruits: [
+            ...this.state.fruits.filter((entry) => entry.id !== fruit.id),
+            fruit,
+          ],
+          inputPanelOpen: false,
+          idToEdit: null,
+          nameToEdit: "",
+          colorToEdit: "",
+        });
+    this.setState(newState);
     console.log("Handling submit...", fruit);
   };
 
-  addfruitHandler = () => {
-    console.log("Adding Fruit...");
-  };
-
-  editfruitHandler = (id) => {
-    console.log("Editing Fruit...", id);
-  };
-
-  updateFruitHandler = (id) => {
-    console.log("Updating fruit...", id);
+  editfruitHandler = (fruit) => {
+    console.log("Editing Fruit...", fruit.id);
+    this.setState({
+      inputPanelOpen: !this.state.inputPanelOpen,
+      addOrEdit: "edit",
+      idToEdit: fruit.id,
+      nameToEdit: fruit.name,
+      colorToEdit: fruit.color,
+    });
   };
 
   deletefruitHandler = (id) => {
@@ -43,24 +61,58 @@ class App extends Component {
   };
 
   render() {
-    const fruitsTable = this.state.fruits.map((fruit) => (
-      <tr key={fruit.id}>
-        <td>{fruit.id}</td>
-        <td>{fruit.name}</td>
-        <td>{fruit.color}</td>
-        <td>
-          <button onClick={() => this.editfruitHandler(fruit.id)}>Edit</button>
-        </td>
-        <td>
-          <button onClick={() => this.deletefruitHandler(fruit.id)}>
-            Delete
-          </button>
-        </td>
-      </tr>
-    ));
+    let inputPanel = (
+      <button onClick={this.toggleInputPanel}>Add A Fruit</button>
+    );
+
+    if (this.state.inputPanelOpen && this.state.addOrEdit === "add") {
+      console.log("Configuring 'Add' Panel...");
+      inputPanel = (
+        <InputPanel
+          headline="Add A Fruit"
+          id={this.state.currentId}
+          name={"New Fruit"}
+          color={"New Color"}
+          cancel={this.toggleInputPanel}
+          submitData={this.handleSubmit}
+        />
+      );
+    }
+
+    if (this.state.inputPanelOpen && this.state.addOrEdit === "edit") {
+      console.log("Configuring 'Edit' Panel...");
+      inputPanel = (
+        <InputPanel
+          headline="Edit A Fruit"
+          id={this.state.idToEdit}
+          name={this.state.nameToEdit}
+          color={this.state.colorToEdit}
+          cancel={this.toggleInputPanel}
+          submitData={this.handleSubmit}
+        />
+      );
+    }
+
+    const fruitsTable = this.state.fruits
+      .sort((a, b) => a.id - b.id)
+      .map((fruit) => (
+        <tr key={fruit.id}>
+          <td>{fruit.id}</td>
+          <td>{fruit.name}</td>
+          <td>{fruit.color}</td>
+          <td>
+            <button onClick={() => this.editfruitHandler(fruit)}>Edit</button>
+          </td>
+          <td>
+            <button onClick={() => this.deletefruitHandler(fruit.id)}>
+              Delete
+            </button>
+          </td>
+        </tr>
+      ));
     return (
       <div className="container-outer">
-        <h1>APP</h1>
+        <h1>Fruits App</h1>
         <div className="container-inner">
           <table>
             <thead>
@@ -73,19 +125,7 @@ class App extends Component {
             <tbody>{fruitsTable}</tbody>
           </table>
         </div>
-        <div className="container-inner">
-          {this.state.inputPanelOpen ? (
-            <InputPanel
-              id={-999}
-              name={"New Fruit"}
-              color={"New Color"}
-              cancel={this.toggleInputPanel}
-              submitData={this.handleSubmit}
-            />
-          ) : (
-            <button onClick={this.toggleInputPanel}>Add A Fruit</button>
-          )}
-        </div>
+        <div className="container-inner">{inputPanel}</div>
       </div>
     );
   }

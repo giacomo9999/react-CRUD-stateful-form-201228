@@ -79,7 +79,7 @@ h4 {
 }
 
 .container-inner {
-  width: 85%;
+  width: 95%;
   margin: 10px auto 5px;
   /* background color 2 */
   background-color: #3c4a59;
@@ -112,7 +112,7 @@ li {
 
 table {
   table-layout: fixed;
-  width: 75%;
+  width: 95%;
   background-color: white;
   padding: 10px;
   margin: 10px auto 20px;
