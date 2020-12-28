@@ -16,8 +16,9 @@ class App extends Component {
     console.log("Toggling input panel...", this.state);
   };
 
-  handleChange = (e) => {
-    console.log("Handling change...");
+  handleSubmit = (fruit) => {
+    this.setState({ fruits: [...this.state.fruits, fruit] });
+    console.log("Handling submit...", fruit);
   };
 
   addfruitHandler = () => {
@@ -71,7 +72,13 @@ class App extends Component {
         </div>
         <div className="container-inner">
           {this.state.inputPanelOpen ? (
-            <InputPanel cancel={this.toggleInputPanel} />
+            <InputPanel
+              id={-999}
+              name={"New Fruit"}
+              color={"New Color"}
+              cancel={this.toggleInputPanel}
+              submitData={this.handleSubmit}
+            />
           ) : (
             <button onClick={this.toggleInputPanel}>Add A Fruit</button>
           )}
