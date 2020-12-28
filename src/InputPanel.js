@@ -37,9 +37,11 @@ class InputPanel extends Component {
               onChange={this.handleChange}
             />
           </label>
-
-          <input className="h-btn" type="button" onClick={this.submitForm} value="Submit" />
+          {/* Alternate approach using "input" element: */}
+          {/* <input className="h-btn" type="button" onClick={this.submitForm} value="Submit" /> */}
+          {/* I STILL don't really get the difference between "button" and "input" submits. */}
         </form>
+        <button onClick={this.submitForm}>Submit</button>
         <button onClick={this.props.cancel}>Cancel</button>
       </div>
     );

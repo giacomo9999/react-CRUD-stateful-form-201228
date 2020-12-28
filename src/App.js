@@ -17,7 +17,10 @@ class App extends Component {
   };
 
   handleSubmit = (fruit) => {
-    this.setState({ fruits: [...this.state.fruits, fruit] });
+    this.setState({
+      fruits: [...this.state.fruits, fruit],
+      inputPanelOpen: false,
+    });
     console.log("Handling submit...", fruit);
   };
 
